@@ -1,4 +1,4 @@
-const { pricePlans, pricePlanNames } = require("../price-plans/price-plans");
+const { pricePlans, pricePlanNames } = require("../../controllers/price-plans/price-plans");
 
 const meters = {
     METER0: "smart-meter-0",

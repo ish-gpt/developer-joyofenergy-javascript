@@ -1,4 +1,4 @@
-const { meters } = require("../meters/meters");
+const { meters } = require("../../constants/meters/meters");
 
 const generateSingle = () => {
     const startTime = 1607686125; // Friday, 11 December 2020 11:28:45 GMT+00:00
@@ -19,7 +19,7 @@ const generateAllMeters = () => {
             readings[meters[key]] = generateSingle();
         }
     }
-
+    console.log("--++--", readings);
     return readings;
 };
 

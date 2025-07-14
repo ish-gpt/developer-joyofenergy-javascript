@@ -1,13 +1,16 @@
 const { pricePlans } = require("./price-plans");
-const { usageForAllPricePlans } = require("../usage/usage");
+const { usageForAllPricePlans } = require("../../services/usage/usage");
+const { readingsData } = require('../readings/readings.data');
+const { readings } = require("../readings/readings");
+const { getReadings, setReadings } = readings(readingsData);
 
-const recommend = (getReadings, req) => {
+const recommend = (req, res) => {
     const meter = req.params.smartMeterId;
     const pricePlanComparisons = usageForAllPricePlans(pricePlans, getReadings(meter)).sort((a, b) => extractCost(a) - extractCost(b))
     if("limit" in req.query) {
-        return pricePlanComparisons.slice(0, req.query.limit);
+        res.send(pricePlanComparisons.slice(0, req.query.limit))
     }
-    return pricePlanComparisons;
+    res.send(pricePlanComparisons)
 };
 
 const extractCost = (cost) => {
@@ -15,13 +18,13 @@ const extractCost = (cost) => {
     return value
 }
 
-const compare = (getData, req) => {
+const compare = (req, res) => {
     const meter = req.params.smartMeterId;
-    const pricePlanComparisons = usageForAllPricePlans(pricePlans, getData(meter));
-    return {
+    const pricePlanComparisons = usageForAllPricePlans(pricePlans, getReadings(meter));
+    res.send({
         smartMeterId: req.params.smartMeterId,
         pricePlanComparisons,
-    };
+    })
 };
 
 module.exports = { recommend, compare };
