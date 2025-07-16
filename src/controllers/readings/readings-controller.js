@@ -3,19 +3,25 @@ const { readings } = require("./readings");
 const { getReadings, setReadings } = readings(readingsData);
 
 const read = (req, res) => { 
-    // (req, res) => {
-    //     res.send(read(getReadings, req));
-    // }
-    const meter = req.params.smartMeterId;
-    res.send(getReadings(meter)); // do error handling
+    const meter = req.params;
+    const response = getReadingsFromMeterId(meter)
+    res.send(response); // do error handling
 };
 
 const store = (req, res) => {
-    // (req, res) => {
-    //     res.send(store(setReadings, req));
-    // }
     const data = req.body;
-    res.send(setReadings(data.smartMeterId, data.electricityReadings)) // do error handling
+    setMeterReadings(data)
+    res.send() // do error handling
 }
 
-module.exports = { read, store };
+const getReadingsFromMeterId = (meter) => {
+    const meterId = meter.smartMeterId;
+
+    return getReadings(meterId);
+}
+
+const setMeterReadings = (data) => {
+    setReadings(data.smartMeterId, data.electricityReadings)
+}
+
+module.exports = { read, store, getReadingsFromMeterId, setMeterReadings };

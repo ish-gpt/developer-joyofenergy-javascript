@@ -1,4 +1,4 @@
-const { meters } = require("../meters/meters");
+const { meters } = require("../../constants/meters/meters");
 const { readingsData } = require("./readings.data");
 
 describe("generate data", () => {

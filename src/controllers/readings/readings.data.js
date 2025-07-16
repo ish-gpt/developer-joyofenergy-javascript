@@ -19,7 +19,6 @@ const generateAllMeters = () => {
             readings[meters[key]] = generateSingle();
         }
     }
-    console.log("--++--", readings);
     return readings;
 };
 
