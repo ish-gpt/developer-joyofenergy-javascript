@@ -1,4 +1,4 @@
-const { meters } = require("../meters/meters");
+const { meters } = require("../../constants/meters/meters");
 const { readings } = require("./readings");
 const { readingsData } = require("./readings.data");
 

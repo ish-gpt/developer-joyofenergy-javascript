@@ -1,4 +1,4 @@
-const readings = (data) => ({ //higher order function
+const readings = (data) => ({
     getReadings: (meterId) => data[meterId] || [],
     setReadings: (meterId, readings) => {
         const currentReadings = data[meterId];

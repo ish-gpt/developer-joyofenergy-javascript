@@ -1,6 +1,6 @@
-const { meters, meterPricePlanMap } = require("../meters/meters");
-const { pricePlanNames, pricePlans } = require("../price-plans/price-plans");
-const { readings } = require("../readings/readings");
+const { meters, meterPricePlanMap } = require("../../constants/meters/meters");
+const { pricePlanNames, pricePlans } = require("../../controllers/price-plans/price-plans");
+const { readings } = require("../../controllers/readings/readings");
 const {
     average,
     timeElapsedInHours,

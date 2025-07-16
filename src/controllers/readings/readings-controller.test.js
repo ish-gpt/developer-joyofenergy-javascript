@@ -1,22 +1,19 @@
-const { read, store } = require("./readings-controller");
+const { getReadingsFromMeterId, setMeterReadings } = require("./readings-controller");
 const { readingsData } = require("./readings.data");
 const { readings } = require("./readings");
-const { meters } = require("../meters/meters");
+const { meters } = require("../../constants/meters/meters");
 
 describe("readings", () => {
-    it("should get readings with meter id from params", () => {
-        const { getReadings } = readings(readingsData);
-        const readingsForMeter = read(getReadings, {
-            params: {
-                smartMeterId: meters.METER0,
-            },
+    it("should get readings with meter id", () => {
+        const readingsForMeter = getReadingsFromMeterId({
+            smartMeterId: meters.METER0,
         });
 
         expect(readingsForMeter).toEqual(readingsData[meters.METER0]);
     });
 
-    it("should store readings with meter id and readings from body", () => {
-        const { setReadings, getReadings } = readings(readingsData);
+    it("should store readings in respective meter with meter id", () => {
+        const { getReadings } = readings(readingsData);
 
         const originalLength = getReadings(meters.METER0).length;
 
@@ -34,9 +31,7 @@ describe("readings", () => {
             ],
         };
 
-        store(setReadings, {
-            body: fixture,
-        });
+        setMeterReadings(fixture);
 
         const newLength = getReadings(meters.METER0).length;
 

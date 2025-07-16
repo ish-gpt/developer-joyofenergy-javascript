@@ -1,7 +1,7 @@
-const { meters } = require("../meters/meters");
+const { meters } = require("../../constants/meters/meters");
 const { pricePlanNames } = require("./price-plans");
 const { readings } = require("../readings/readings");
-const { compare, recommend } = require("./price-plans-controller");
+const { getPricePlanComparision, getRecommendedPricePlan } = require("./price-plans-controller");
 
 describe("price plans", () => {
     it("should compare usage cost for all price plans", () => {
@@ -13,27 +13,22 @@ describe("price plans", () => {
             ],
         });
 
-        const expected = {
-            pricePlanComparisons: [
-                {
-                    [pricePlanNames.PRICEPLAN0]: 0.26785 / 48 * 10,
-                },
-                {
-                    [pricePlanNames.PRICEPLAN1]: 0.26785 / 48 * 2,
-                },
-                {
-                    [pricePlanNames.PRICEPLAN2]: 0.26785 / 48 * 1,
-                },
-            ],
-            smartMeterId: meters.METER0
-        };
-
-        const recommendation = compare(getReadings, {
-            params: {
-                smartMeterId: meters.METER0,
+        const expected = [
+            {
+                [pricePlanNames.PRICEPLAN0]: 0.26785 / 48 * 10,
             },
+            {
+                [pricePlanNames.PRICEPLAN1]: 0.26785 / 48 * 2,
+            },
+            {
+                [pricePlanNames.PRICEPLAN2]: 0.26785 / 48 * 1,
+            },
+        ];
+
+        const recommendation = getPricePlanComparision({
+            smartMeterId: meters.METER0,
             query: {}
-        });
+        }, getReadings);
 
         expect(recommendation).toEqual(expected);
     });
@@ -59,12 +54,10 @@ describe("price plans", () => {
             },
         ];
 
-        const recommendation = recommend(getReadings, {
-            params: {
-                smartMeterId: meters.METER0,
-            },
+        const recommendation = getRecommendedPricePlan({
+            smartMeterId: meters.METER0,
             query: {}
-        });
+        }, getReadings);
 
         expect(recommendation).toEqual(expected);
     });
@@ -86,15 +79,10 @@ describe("price plans", () => {
                 [pricePlanNames.PRICEPLAN1]: 0.26785 / 48 * 2,
             },
         ];
-
-        const recommendation = recommend(getReadings, {
-            params: {
-                smartMeterId: meters.METER0,
-            },
-            query: {
-                limit: 2
-            }
-        });
+        const limit = 2;
+        const recommendation = getRecommendedPricePlan({
+            smartMeterId: meters.METER0
+        }, getReadings, limit);
 
         expect(recommendation).toEqual(expected);
     });
