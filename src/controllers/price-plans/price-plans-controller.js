@@ -3,12 +3,18 @@ const { usageForAllPricePlans } = require("../../services/usage/usage");
 const { readingsData } = require('../readings/readings.data');
 const { readings } = require("../readings/readings");
 const { getReadings, setReadings } = readings(readingsData);
+const responseHandler = require('../../utils/responseHandler');
 
 const recommend = (req, res) => {
-    const meter = req.params;
-    const limit = req.query.limit;
-    const pricePlanComparisons = getRecommendedPricePlan(meter, getReadings, limit);
-    res.send(pricePlanComparisons)
+    try {
+        const meter = req.params;
+        const limit = req.query.limit;
+        const pricePlanComparisons = getRecommendedPricePlan(meter, getReadings, limit);
+        responseHandler.send(null,req,res,pricePlanComparisons)
+    } catch (error) {
+        responseHandler.send(error, req, res, null);
+    }
+    
 };
 
 const extractCost = (cost) => {
@@ -17,12 +23,17 @@ const extractCost = (cost) => {
 }
 
 const compare = (req, res) => {
-    const meter = req.params;
-    const pricePlanComparisons = getPricePlanComparision(meter, getReadings)
-    res.send({
-        smartMeterId: req.params.smartMeterId,
-        pricePlanComparisons,
-    })
+    try {
+        const meter = req.params;
+        const pricePlanComparisons = getPricePlanComparision(meter, getReadings)
+        const response = {
+            smartMeterId: req.params.smartMeterId,
+            pricePlanComparisons,
+        }
+        responseHandler.send(null, req, res, response);
+    } catch (error) {
+        responseHandler.send(error, req, res, null);
+    }
 };
 
 const getPricePlanComparision = (meter, getReadings) => {
